@@ -7,7 +7,7 @@ import java.sql.*;
 /**
  * Created by JKKim on 2016. 3. 25..
  */
-public class UserDao {
+public abstract class UserDao {
     public User get(long id) throws SQLException, ClassNotFoundException {
         String sql = "select * from test where id = ?";
 
@@ -61,8 +61,9 @@ public class UserDao {
 
         return id;
     }
-    private Connection getConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false","root","");
-    }
+
+    abstract public Connection getConnection() throws ClassNotFoundException, SQLException;
+//        Class.forName("com.mysql.jdbc.Driver");
+//        return DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false","root","");
+
 }
