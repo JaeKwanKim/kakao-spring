@@ -7,11 +7,17 @@ import java.sql.*;
 /**
  * Created by JKKim on 2016. 3. 25..
  */
-public abstract class UserDao {
+public class UserDao {
+    private final ConnectionMaker connectionMaker;
+
+    public UserDao(ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
+    }
+
     public User get(long id) throws SQLException, ClassNotFoundException {
         String sql = "select * from test where id = ?";
 
-        Connection connection = getConnection();
+        Connection connection = connectionMaker.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setLong(1, id);
 
@@ -33,7 +39,7 @@ public abstract class UserDao {
     public long add(User user) throws SQLException, ClassNotFoundException {
         String sql = "insert into test(name, password) values(?,?)";
 
-        Connection connection = getConnection();
+        Connection connection = connectionMaker.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, user.getName());
         statement.setString(2, user.getPassword());
@@ -62,8 +68,5 @@ public abstract class UserDao {
         return id;
     }
 
-    abstract public Connection getConnection() throws ClassNotFoundException, SQLException;
-//        Class.forName("com.mysql.jdbc.Driver");
-//        return DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false","root","");
 
 }

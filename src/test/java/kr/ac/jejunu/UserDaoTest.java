@@ -1,7 +1,6 @@
 package kr.ac.jejunu;
 
-import kr.ac.jejunu.dao.HanlaUserDao;
-import kr.ac.jejunu.dao.JejuUserDao;
+import kr.ac.jejunu.dao.DaoFactory;
 import kr.ac.jejunu.dao.UserDao;
 import kr.ac.jejunu.model.User;
 import org.junit.Before;
@@ -23,11 +22,12 @@ public class UserDaoTest {
         id = 1L;
         name = "김재관";
         password = "1234";
+        userDao = new DaoFactory().getUserDao();
+
     }
 
     @Test
     public void get() throws SQLException, ClassNotFoundException {
-        userDao = new JejuUserDao();
         User user = userDao.get(id);
 
         assertThat(user.getId(), is(id));
@@ -37,7 +37,6 @@ public class UserDaoTest {
 
     @Test
     public void getForHanla() throws SQLException, ClassNotFoundException {
-        userDao = new HanlaUserDao();
         User user = userDao.get(id);
 
         assertThat(user.getId(), is(id));
@@ -47,7 +46,6 @@ public class UserDaoTest {
 
     @Test
     public void add() throws SQLException, ClassNotFoundException {
-        userDao = new JejuUserDao();
         User user = new User();
         String name = "헐크";
         String password = "2222";
@@ -66,7 +64,6 @@ public class UserDaoTest {
 
     @Test
     public void addForHanla() throws SQLException, ClassNotFoundException {
-        userDao = new HanlaUserDao();
         User user = new User();
         String name = "헐크";
         String password = "2222";
