@@ -5,6 +5,8 @@ import kr.ac.jejunu.dao.UserDao;
 import kr.ac.jejunu.model.User;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.SQLException;
 
@@ -12,18 +14,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class UserDaoTest {
-    long id;
-    String name;
-    String password;
-    UserDao userDao;
+    private long id;
+    private String name;
+    private String password;
+    private UserDao userDao;
 
     @Before
     public void setup() {
         id = 1L;
         name = "김재관";
         password = "1234";
-        userDao = new DaoFactory().getUserDao();
-
+//        userDao = new DaoFactory().userDao();
+        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+        userDao = (UserDao) context.getBean("userDao");
     }
 
     @Test
@@ -81,4 +84,7 @@ public class UserDaoTest {
     }
 
 
+    private void validate(String name, String password) {
+
+    }
 }
