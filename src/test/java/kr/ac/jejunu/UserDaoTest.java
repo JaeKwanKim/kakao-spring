@@ -71,21 +71,21 @@ public class UserDaoTest {
         User resultUser = userDao.get(idd);
         assertThat(resultUser, nullValue());
     }
-    @Test
-    public void addForHanla() throws SQLException, ClassNotFoundException {
-        User user = new User();
-        String name = "헐크";
-        String password = "2222";
-
-        user.setName(name);
-        user.setPassword(password);
-
-        long idd = userDao.add(user);
-
-        User resultUser = userDao.get(idd);
-
-        validate(name, password, idd, resultUser);
-    }
+//    @Test
+//    public void addForHanla() throws SQLException, ClassNotFoundException {
+//        User user = new User();
+//        String name = "헐크";
+//        String password = "2222";
+//
+//        user.setName(name);
+//        user.setPassword(password);
+//
+//        long idd = userDao.add(user);
+//
+//        User resultUser = userDao.get(idd);
+//
+//        validate(name, password, idd, resultUser);
+//    }
 
     @Test
     public void update() throws SQLException, ClassNotFoundException {
