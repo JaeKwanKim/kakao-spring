@@ -1,12 +1,11 @@
 package kr.ac.jejunu;
 
-import kr.ac.jejunu.dao.DaoFactory;
 import kr.ac.jejunu.dao.UserDao;
 import kr.ac.jejunu.model.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
 import java.sql.SQLException;
 
@@ -25,7 +24,9 @@ public class UserDaoTest {
         name = "김재관";
         password = "1234";
 //        userDao = new DaoFactory().userDao();
-        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+//        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+//        userDao = (UserDao) context.getBean("userDao");
+        ApplicationContext context = new GenericXmlApplicationContext("DaoFactory.xml");
         userDao = (UserDao) context.getBean("userDao");
     }
 
