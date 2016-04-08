@@ -15,24 +15,50 @@ public class UserDao {
     }
 
     public User get(long id) throws SQLException, ClassNotFoundException {
+        Connection connection = null;
         String sql = "select * from test where id = ?";
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        User user = null;
+        try {
 
-        Connection connection = connectionMaker.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setLong(1, id);
+            connection = connectionMaker.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, id);
 
-        ResultSet resultSet = statement.executeQuery();
-        resultSet.next();
-
-        User user = new User();
-        user.setId(resultSet.getLong("id"));
-        user.setName(resultSet.getString("name"));
-        user.setPassword(resultSet.getString("password"));
-
-        resultSet.close();
-        statement.close();
-        connection.close();
-
+            resultSet = statement.executeQuery();
+            if(resultSet.next()) {
+                user = new User();
+                user.setId(resultSet.getLong("id"));
+                user.setName(resultSet.getString("name"));
+                user.setPassword(resultSet.getString("password"));
+            }
+        } catch (ClassNotFoundException e1){
+            e1.printStackTrace();
+            throw e1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally{
+            if(resultSet != null)
+                try {
+                    resultSet.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            if(statement !=null)
+                try {
+                    statement.close();
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            if(connection != null)
+                try {
+                    connection.close();
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+        }
         return user;
     }
 
@@ -69,4 +95,97 @@ public class UserDao {
     }
 
 
+    public void delete(long id) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        String sql = "delete from test where id=?";
+        try {
+
+            connection = connectionMaker.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, id);
+
+            statement.executeUpdate();
+        } catch (ClassNotFoundException e){
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally{
+            if(statement !=null)
+                try {
+                    statement.close();
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            if(connection != null)
+                try {
+                    connection.close();
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+        }
+
+    }
+
+    public void update(User user) {
+        String sql = "update test set name=?, password=? where id=?";
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = connectionMaker.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getPassword());
+            statement.setLong(3, user.getId());
+
+            statement.executeUpdate();
+        }catch (ClassNotFoundException e){
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally{
+            if(statement !=null)
+                try {
+                    statement.close();
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            if(connection != null)
+                try {
+                    connection.close();
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+        }
+    }
+
+    public void removeAll() {
+        String sql = "DELETE from test";
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = connectionMaker.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.executeUpdate();
+        }catch (ClassNotFoundException e){
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally{
+            if(statement !=null)
+                try {
+                    statement.close();
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            if(connection != null)
+                try {
+                    connection.close();
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+        }
+    }
 }

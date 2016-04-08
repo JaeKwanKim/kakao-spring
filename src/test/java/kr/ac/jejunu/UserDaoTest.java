@@ -9,6 +9,7 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 
 import java.sql.SQLException;
 
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -20,32 +21,22 @@ public class UserDaoTest {
 
     @Before
     public void setup() {
-        id = 1L;
         name = "김재관";
         password = "1234";
 //        userDao = new DaoFactory().userDao();
 //        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
-//        userDao = (UserDao) context.getBean("userDao");
         ApplicationContext context = new GenericXmlApplicationContext("DaoFactory.xml");
         userDao = (UserDao) context.getBean("userDao");
     }
 
     @Test
     public void get() throws SQLException, ClassNotFoundException {
-        User user = userDao.get(id);
+        userDao.removeAll();
+        User user = new User(name, password);
+        id = userDao.add(user);
+        user = userDao.get(id);
 
-        assertThat(user.getId(), is(id));
-        assertThat(user.getName(), is(name));
-        assertThat(user.getPassword(), is(password));
-    }
-
-    @Test
-    public void getForHanla() throws SQLException, ClassNotFoundException {
-        User user = userDao.get(id);
-
-        assertThat(user.getId(), is(id));
-        assertThat(user.getName(), is(name));
-        assertThat(user.getPassword(), is(password));
+        validate(name, password, id, user);
     }
 
     @Test
@@ -61,11 +52,25 @@ public class UserDaoTest {
 
         User resultUser = userDao.get(idd);
 
-        assertThat(resultUser.getId(), is(idd));
-        assertThat(resultUser.getName(), is(name));
-        assertThat(resultUser.getPassword(), is(password));
+        validate(name, password, idd, resultUser);
     }
 
+    @Test
+    public void delete() throws SQLException, ClassNotFoundException {
+        User user = new User();
+        String name = "헐크";
+        String password = "2222";
+
+        user.setName(name);
+        user.setPassword(password);
+
+        long idd = userDao.add(user);
+
+        userDao.delete(idd);
+
+        User resultUser = userDao.get(idd);
+        assertThat(resultUser, nullValue());
+    }
     @Test
     public void addForHanla() throws SQLException, ClassNotFoundException {
         User user = new User();
@@ -79,13 +84,37 @@ public class UserDaoTest {
 
         User resultUser = userDao.get(idd);
 
+        validate(name, password, idd, resultUser);
+    }
+
+    @Test
+    public void update() throws SQLException, ClassNotFoundException {
+        User user = new User();
+        String name = "헐크";
+        String password = "2222";
+
+        user.setName(name);
+        user.setPassword(password);
+
+        long idd = userDao.add(user);
+
+        name = "허윤호";
+        password = "1111";
+        user.setName(name);
+        user.setPassword(password);
+        user.setId(idd);
+
+        userDao.update(user);
+
+        User resultUser = userDao.get(idd);
+
+        validate(name, password, idd, resultUser);
+    }
+
+    private void validate(String name, String password, long idd, User resultUser) {
         assertThat(resultUser.getId(), is(idd));
         assertThat(resultUser.getName(), is(name));
         assertThat(resultUser.getPassword(), is(password));
     }
 
-
-    private void validate(String name, String password) {
-
-    }
 }
