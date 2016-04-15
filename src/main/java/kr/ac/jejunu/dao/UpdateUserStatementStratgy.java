@@ -10,7 +10,7 @@ import java.sql.SQLException;
  * Created by JKKim on 2016. 4. 8..
  */
 public class UpdateUserStatementStratgy implements StatementStrategy {
-    User user;
+    private User user;
     public UpdateUserStatementStratgy(User user) {
         this.user = user;
     }

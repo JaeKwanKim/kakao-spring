@@ -31,7 +31,6 @@ public class UserDaoTest {
 
     @Test
     public void get() throws SQLException, ClassNotFoundException {
-        userDao.removeAll();
         User user = new User(name, password);
         id = userDao.add(user);
         user = userDao.get(id);
