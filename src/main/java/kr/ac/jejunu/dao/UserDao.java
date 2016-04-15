@@ -1,36 +1,70 @@
 package kr.ac.jejunu.dao;
 
+import com.mysql.jdbc.Statement;
 import kr.ac.jejunu.model.User;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * Created by JKKim on 2016. 3. 25..
  */
 public class UserDao {
-    private jdbcContext jdbcContext;
+    private JdbcTemplate jdbcTemplate;
 
-    public User get(long id) throws SQLException, ClassNotFoundException {
-        StatementStrategy statementStrategy = new GetUserStatementStrategy(id);
-        return jdbcContext.jdbcContextwithStatementStrategyForQuery(statementStrategy);
+    public User get(long id) throws SQLException, ClassNotFoundException{
+        String sql = "select * from test where id = ?";
+//        StatementStrategy statementStrategy = new GetUserStatementStrategy(id);
+        User user = null;
+        try {
+            user = jdbcTemplate.queryForObject(sql, new Object[]{id}, userMapper);
+        } catch (EmptyResultDataAccessException e) {}
+        return user;
     }
 
     public long add(User user) throws SQLException, ClassNotFoundException {
-        StatementStrategy statementStrategy = new AddUserStatementStrategy(user);
-        return jdbcContext.jdbcContextWithStatementStrategyForInsert(statementStrategy);
+        String sql = "insert into test(name, password) values(?,?)";
+//        StatementStrategy statementStrategy = new AddUserStatementStrategy(user);
+        GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                statement.setString(1, user.getName());
+                statement.setString(2, user.getPassword());
+                return statement;
+            }
+        }, generatedKeyHolder);
+        return (long) generatedKeyHolder.getKey();
     }
 
     public void delete(long id) {
-        StatementStrategy statementStrategy = new DeleteUserStatementStratgy(id);
-        jdbcContext.jdbcContextWithStatementStarategy(statementStrategy);
+        String sql = "delete from test where id=?";
+//        StatementStrategy statementStrategy = new DeleteUserStatementStratgy(id);
+        jdbcTemplate.update(sql, new Object[] {id});
     }
 
     public void update(User user) {
-        StatementStrategy statementStrategy = new UpdateUserStatementStratgy(user);
-        jdbcContext.jdbcContextWithStatementStarategy(statementStrategy);
+        String sql = "update test set name=?, password=? where id=?";
+//        StatementStrategy statementStrategy = new UpdateUserStatementStratgy(user);
+        jdbcTemplate.update(sql, new Object[]{user.getName(), user.getPassword(), user.getId()});
     }
 
-    public void setJdbcContext(jdbcContext jdbcContext) {
-        this.jdbcContext = jdbcContext;
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
+
+    private RowMapper<User> userMapper = (resultSet, i) -> {
+        User user = new User();
+        user.setId(resultSet.getLong("id"));
+        user.setName(resultSet.getString("name"));
+        user.setPassword(resultSet.getString("password"));
+        return user;
+    };
 }

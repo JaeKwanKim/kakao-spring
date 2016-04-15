@@ -2,13 +2,14 @@ package kr.ac.jejunu.dao;
 
 import kr.ac.jejunu.model.User;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class jdbcContext {
-    ConnectionMaker connectionMaker;
+    DataSource dataSource;
 
     public jdbcContext() {
     }
@@ -17,13 +18,11 @@ public class jdbcContext {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            connection = connectionMaker.getConnection();
+            connection = dataSource.getConnection();
             statement = statementStrategy.makeStatement(connection);
 
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         long id = getLastInsertId(connection);
@@ -40,7 +39,7 @@ public class jdbcContext {
         ResultSet resultSet = null;
         User user = null;
         try {
-            connection = connectionMaker.getConnection();
+            connection = dataSource.getConnection();
             statement = statementStrategy.makeStatement(connection);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -49,9 +48,6 @@ public class jdbcContext {
                 user.setName(resultSet.getString("name"));
                 user.setPassword(resultSet.getString("password"));
             }
-        } catch (ClassNotFoundException e1) {
-            e1.printStackTrace();
-            throw e1;
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
@@ -82,11 +78,9 @@ public class jdbcContext {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            connection = connectionMaker.getConnection();
+            connection = dataSource.getConnection();
             statement = statementStrategy.makeStatement(connection);
             statement.executeUpdate();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -119,7 +113,7 @@ public class jdbcContext {
         return id;
     }
 
-    public void setConnectionMaker(ConnectionMaker connectionMaker) {
-        this.connectionMaker = connectionMaker;
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }

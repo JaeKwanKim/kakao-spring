@@ -4,12 +4,19 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="userDao" class="kr.ac.jejunu.dao.UserDao">
-        <property name="jdbcContext" ref="jdbcContext" />
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
     </bean>
 
-    <bean id="jdbcContext" class="kr.ac.jejunu.dao.jdbcContext" >
-        <property name="connectionMaker" ref="connectionMaker" />
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource" >
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/test?useSSL=false" />
+        <property name="username" value="root" />
+        <property name="password" value=""/>
     </bean>
 
-    <bean id="connectionMaker" class="kr.ac.jejunu.dao.SimpleConnectionMaker" />
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" >
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!--<bean id="dataSource" class="kr.ac.jejunu.dao.SimpleConnectionMaker" />-->
 </beans>
