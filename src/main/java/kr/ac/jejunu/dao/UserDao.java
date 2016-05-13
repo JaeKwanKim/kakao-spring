@@ -4,13 +4,10 @@ import com.mysql.jdbc.Statement;
 import kr.ac.jejunu.model.User;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 /**
  * Created by JKKim on 2016. 3. 25..
@@ -18,7 +15,7 @@ import java.sql.SQLException;
 public class UserDao {
     private JdbcTemplate jdbcTemplate;
 
-    public User get(long id) throws SQLException, ClassNotFoundException{
+    public User get(long id){
         String sql = "select * from test where id = ?";
 //        StatementStrategy statementStrategy = new GetUserStatementStrategy(id);
         User user = null;
@@ -28,18 +25,15 @@ public class UserDao {
         return user;
     }
 
-    public long add(User user) throws SQLException, ClassNotFoundException {
+    public long add(User user) {
         String sql = "insert into test(name, password) values(?,?)";
 //        StatementStrategy statementStrategy = new AddUserStatementStrategy(user);
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                statement.setString(1, user.getName());
-                statement.setString(2, user.getPassword());
-                return statement;
-            }
+        jdbcTemplate.update(con -> {
+            PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getPassword());
+            return statement;
         }, generatedKeyHolder);
         return (long) generatedKeyHolder.getKey();
     }
