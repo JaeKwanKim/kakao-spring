@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-/**
- * Created by hyh0408 on 2016. 4. 27..
- */
+
 @Component
 public class HelloPersonImpl implements HelloPerson{
 

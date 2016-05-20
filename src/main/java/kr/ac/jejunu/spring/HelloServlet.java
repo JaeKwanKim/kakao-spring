@@ -1,17 +1,17 @@
-package kr.ac.jejunu.servlet;
+package kr.ac.jejunu.spring;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
 import javax.servlet.GenericServlet;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebServlet;
 import java.io.IOException;
 
 
-@WebServlet(urlPatterns = "/hello")
+@Controller
 public class HelloServlet extends GenericServlet{
 
     private final static Logger logger = LoggerFactory.getLogger(HelloServlet.class);

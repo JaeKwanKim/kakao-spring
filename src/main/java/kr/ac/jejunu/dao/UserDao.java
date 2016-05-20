@@ -1,6 +1,5 @@
 package kr.ac.jejunu.dao;
 
-import com.mysql.jdbc.Statement;
 import kr.ac.jejunu.model.User;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -8,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 /**
  * Created by JKKim on 2016. 3. 25..

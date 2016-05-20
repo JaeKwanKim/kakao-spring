@@ -6,12 +6,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-/**
- * Created by hyh0408 on 2016. 4. 28..
- */
+
 @WebFilter
 public class HelloFilter implements Filter {
     private final static Logger logger = LoggerFactory.getLogger(HelloFilter.class);

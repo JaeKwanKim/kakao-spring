@@ -1,10 +1,10 @@
 package kr.ac.jejunu.hello;
 
+import kr.ac.jejunu.Hello.HelloPerson;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 
 /**

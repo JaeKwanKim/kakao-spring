@@ -1,10 +1,13 @@
 package kr.ac.jejunu.hello;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
+import kr.ac.jejunu.Hello.Hello;
+import kr.ac.jejunu.Hello.HelloPerson;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Created by hyh0408 on 2016. 4. 28..

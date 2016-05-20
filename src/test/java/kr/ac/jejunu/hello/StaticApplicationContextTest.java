@@ -1,12 +1,16 @@
 package kr.ac.jejunu.hello;
 
+import kr.ac.jejunu.Hello.Hello;
+import kr.ac.jejunu.Hello.HelloImpl;
+import kr.ac.jejunu.Hello.HelloPerson;
+import kr.ac.jejunu.Hello.HelloPersonImpl;
 import org.junit.Test;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.RuntimeBeanNameReference;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.support.StaticApplicationContext;
-import static org.hamcrest.CoreMatchers.*;
+
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
